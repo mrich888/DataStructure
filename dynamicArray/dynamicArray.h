@@ -30,10 +30,10 @@ int dynamaicArrayMoidfyAppointPosData(dynamaicArray *pArray, int pos, ELEMENTTYP
 int dynamaicArrayDeleteData(dynamaicArray *pArray);
 
 /* 动态数组删除指定位置的数据 */
-int dynamaicArrayMoidfyAppointPosData(dynamaicArray *pArray, int pos);
+int dynamaicArrayAppointPosData(dynamaicArray *pArray, int pos);
 
 /* 动态数组删除指定的元素 */
-int dynamaicArrayDeleteAppointData(dynamaicArray *pArray, int pos);
+int dynamaicArrayDeleteAppointData(dynamaicArray *pArray, ELEMENTTYPE val, int (*comparaFunc)(ELEMENTTYPE val1, ELEMENTTYPE val2));
 
 /* 动态数组的销毁 */
 int dynamaicArrayDestroy(dynamaicArray *pArray);
@@ -42,7 +42,12 @@ int dynamaicArrayDestroy(dynamaicArray *pArray);
 int dynamaicArrayGetSize(dynamaicArray *pArray, int *pSize);
 
 /* 获取数组的容量 */
-int dynamaicArrayGetCapacity(dynamaicArray *pArray, int *Capacity);
+int dynamaicArrayGetCapacity(dynamaicArray *pArray, int *pCapacity);
 
+/* 获取指定位置的元素数据 */
+int dynamaicArrayGetAppointPosVal(dynamaicArray *pArray, int pos, ELEMENTTYPE *pVal);
+
+/* 数组排序 */
+int dynamaicArrayAppointWaySort(dynamaicArray *pArray, int (*comparaFunc)(ELEMENTTYPE val1, ELEMENTTYPE val2));
 
 #endif //__DYNAMIC_ARRAY_H_
