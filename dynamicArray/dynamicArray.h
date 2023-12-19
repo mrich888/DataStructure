@@ -44,4 +44,5 @@ int dynamaicArrayGetSize(dynamaicArray *pArray, int *pSize);
 /* 获取数组的容量 */
 int dynamaicArrayGetCapacity(dynamaicArray *pArray, int *Capacity);
 
+
 #endif //__DYNAMIC_ARRAY_H_
