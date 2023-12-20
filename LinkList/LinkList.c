@@ -20,7 +20,7 @@ static int LinkListAccordAppointValGetPos(LinkList * pList, ELEMENTTYPE val,  in
 int LinkListInit(LinkList ** pList)
 {
     int ret = 0;
-    LinkList *list = (LinkList *)malloc(sizeof(LinkList) * 1);//分配空间
+    LinkList *list = (LinkList *)malloc(sizeof(LinkList) * 1);//给链表分配空间
     if(list == NULL)
     {
         return MALLOC_ERROR;
@@ -77,7 +77,7 @@ int LinkListAppointPosInsert(LinkList * pList, int pos, ELEMENTTYPE val)
     }
 
     /* 封装一个结点 */
-    LinkNode * newNode = (LinkList *)malloc(sizeof(LinkNode) * 1);
+    LinkNode * newNode = (LinkNode *)malloc(sizeof(LinkNode) * 1);
     if(newNode == NULL)
     {
         return MALLOC_ERROR;
@@ -176,6 +176,7 @@ int LinkListDelAppointPos(LinkList * pList, int pos)
         flag = 1;
     }
 
+
     while(--pos)
     {
         /* 向后移动位置 */
@@ -190,6 +191,8 @@ int LinkListDelAppointPos(LinkList * pList, int pos)
         pList->tail = travelNode;
     }
 
+    
+    
 #if 0
     if(travelNode->next != NULL)
     {
@@ -300,8 +303,10 @@ int LinkListDestory(LinkList * pList)
     return ret;
 }
 /* 链表的遍历 */
-int LinkListForeach(LinkList * pList)
+int LinkListForeach(LinkList * pList, int (*printfFunc)(ELEMENTTYPE))
 {
+
+    /*int (*printfFunc)(ELEMENTTYPE) 是形参，它的实参是printStruct */ 
     int ret = 0;
     if(pList == NULL)
     {
@@ -320,7 +325,13 @@ int LinkListForeach(LinkList * pList)
     LinkNode * travelNode = pList->head->next;
     while (travelNode != NULL)
     {
-        printf("travelNode->data:\n", travelNode->data);
+        #if 0
+        printf("travelNode->data:%d\n", travelNode->data);
+        #else
+        /* 包装器   钩子  回调函数 */
+        printfFunc(travelNode->data);
+
+        #endif
         travelNode = travelNode->next;
     }
 #endif
