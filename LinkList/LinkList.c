@@ -154,8 +154,28 @@ int LinkListDestory(LinkList * pList)
 {
 
 }
-
+/* 链表的遍历 */
 int LinkListForeach(LinkList * pList)
 {
-
+    int ret = 0;
+    if(pList == NULL)
+    {
+        return NULL_PTR;
+    }
+#if 0
+    LinkNode * travelNode = pList->head;
+     while (travelNode != NULL)
+    {
+        travelNode = travelNode->next;
+        printf("travelNode->data:\n", travelNode->data);
+    }
+#else
+    LinkNode * travelNode = pList->head->next;
+    while (travelNode != NULL)
+    {
+        printf("travelNode->data:\n", travelNode->data);
+        travelNode = travelNode->next;
+    }
+#endif
+    return ret;
 }
