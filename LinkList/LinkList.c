@@ -10,7 +10,11 @@ enum STATUS_CODE
     NULL_PTR,
     MALLOC_ERROR,
     INVALID_ACCESS,
+    NOT_FIN,
 };
+/* 静态前置声明 */
+/* 静态函数只在本源文件（.c）使用 */
+static int LinkListAccordAppointValGetPos(LinkList * pList, ELEMENTTYPE val,  int *pPos);
 
 /* 链表初始化 */
 int LinkListInit(LinkList ** pList)
@@ -31,7 +35,7 @@ int LinkListInit(LinkList ** pList)
 
     /* 清空脏数据 */
     memset(list->head, 0,sizeof(LinkNode) * 1);
-
+    /* 初始化 */
     list->head->data = 0;
     list->head->next = NULL;
     
@@ -193,10 +197,55 @@ int LinkListDelAppointPos(LinkList * pList, int pos)
 
 }
 
+/* 根据指定位置的元素得到再链表中所在的位置 */
+static int LinkListAccordAppointValGetPos(LinkList * pList, ELEMENTTYPE val, int *pPos)
+{
+    /* 静态函数只给本源文件的函数用，不需要判断合法性 */
+    int ret = 0;
+#if 0
+    LinkNode * travelNode = pList->head;
+#else
+    int pos = 1;
+    LinkNode * travelNode = pList->head->next;
+#endif
+    while (travelNode != NULL)
+    {
+        /* 如果遍历的结点里面的值等于我想要删除的值，返回当前的位置（pos）*/
+        if(travelNode->data == val)
+        {
+            /* 解引用 */
+            *pPos = pos; 
+            return pos;//返回不显示成功与否的返回值 
+        }
+        travelNode = travelNode->next;
+        pos++;
+    }
+    *pPos = NOT_FIN;
+    return NOT_FIN;
+}
+
 /* 链表删除指定数据 */
 int LinkListDelAppointData(LinkList * pList, ELEMENTTYPE val)
 {
+    int ret = 0;
 
+    /* 找到要删除的值的位置，就可以复用删除指定位置的函数 */
+    int pos =0;
+    /* 链表的长度 */
+    int size = 0;
+
+    /* 需要遍历链表全部去找 */
+    /* 但可能存在 不只一个满足条件的值 // 没有满足条件的值 */
+    while (LinkListGetLength(pList, &size) && pos != NOT_FIN)
+    {
+        LinkListDelAppointPos(pList, LinkListAccordAppointValGetPos(pList, val, &pos));
+    }
+
+#if 0
+    LinkListAccordAppointValGetPos(pList, val, &pos);
+    LinkListDelAppointPos(pList, pos);
+#endif
+    return ret;
 }
 
 /* 获取链表的长度 */
@@ -231,7 +280,7 @@ int LinkListDestory(LinkList * pList)
     {
         free(pList->head );
         pList->head = NULL;
-        pList->tail =NULL;
+        pList->tail = NULL;
     }
     return ret;
 }
