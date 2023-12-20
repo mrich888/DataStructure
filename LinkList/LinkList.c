@@ -211,14 +211,29 @@ int LinkListGetLength(LinkList * pList, int *pSize)
     {
         *pSize = pList->len;
     }
-
-    return ret;
+    /* 返回链表的长度 */
+    return pList->len;
 }
 
 /* 链表的销毁 */
 int LinkListDestory(LinkList * pList)
 {
+    int ret = 0;
+    /* 代码复用 ：使用头删删除结点 */
+    int size = 0;
+    /* 非零即正，则可以进入循环 */
+    while (LinkListGetLength(pList, &size))
+    {
+        LinkListHeadDel(pList);
+    }
 
+    if(pList->head != NULL)
+    {
+        free(pList->head );
+        pList->head = NULL;
+        pList->tail =NULL;
+    }
+    return ret;
 }
 /* 链表的遍历 */
 int LinkListForeach(LinkList * pList)
