@@ -62,3 +62,8 @@ int LinkListDestory(LinkList *pList)
 {
 
 }
+
+int LinkListForeach(LinkList *pList)
+{
+
+}
