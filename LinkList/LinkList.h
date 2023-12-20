@@ -6,6 +6,7 @@
 typedef struct LinkNode
 {
     ELEMENTTYPE data;
+
     /* 指向下一个结点的指针 */
     struct LinkNode *next; /* 指针类型 */
 
@@ -16,10 +17,12 @@ typedef struct LinkNode
 typedef struct LinkList
 {
     LinkNode * head;  /* 链表的虚拟头结点 */
-
+    LinkNode * tail;  /* 为什么尾指针不需要分配空间 */
     int len;         /* 链表长度 */
 
 }LinkList;
+
+
 
 /* 链表初始化 */
 int LinkListInit(LinkList ** pList);
