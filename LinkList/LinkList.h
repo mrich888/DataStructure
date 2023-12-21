@@ -47,16 +47,17 @@ int LinkListTailDel(LinkList * pList);
 int LinkListDelAppointPos(LinkList * pList, int pos);
 
 /* 链表删除指定数据 */
-int LinkListDelAppointData(LinkList * pList, ELEMENTTYPE val);
+int LinkListDelAppointData(LinkList * pList, ELEMENTTYPE val, int (*compareFunc)(ELEMENTTYPE val1, ELEMENTTYPE val2));
 
 /* 获取链表的长度 */
-int LinkListGetLength(LinkList * pList, int *pSize);
+
+int LinkListGetLength(LinkList * pList , int *pSize);
 
 /* 链表的销毁 */
 int LinkListDestory(LinkList * pList);
 
 /* 链表遍历接口 */
-int LinkListForeach(LinkList * pList, int (*printfFunc)(ELEMENTTYPE));
+int LinkListForeach(LinkList * pList, int (*printFunc)(ELEMENTTYPE));
 
 
 #endif //__LinkList_H_

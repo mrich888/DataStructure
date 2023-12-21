@@ -27,7 +27,7 @@ int LinkListInit(LinkList ** pList)
     }
     memset(list, 0, sizeof(LinkList) * 1);
 
-    list->head = (LinkNode *)malloc(sizeof(LinkNode) * 1);/* 头插入需要分配空间（有指针但不一定有值) */
+    list->head = (LinkNode *)malloc(sizeof(LinkNode) * 1);/* 头结点需要分配空间（有指针但不一定有值) */
     if(list->head == NULL)
     {
         return MALLOC_ERROR;
@@ -104,14 +104,14 @@ int LinkListAppointPosInsert(LinkList * pList, int pos, ELEMENTTYPE val)
     if(pos == pList->len)
     {
         travelNode = pList->tail;
-
+        flag = 1;
     }
     else
     {
         while (pos)
         {
-        travelNode = travelNode->next;/* 找到想要插入数据的位置 */
-        pos--;
+            travelNode = travelNode->next;/* 找到想要插入数据的位置 */
+            pos--;
         }
     }
     newNode->next = travelNode->next;
@@ -170,7 +170,7 @@ int LinkListDelAppointPos(LinkList * pList, int pos)
 
     int flag = 0;
     /* 尾指针需要移动 */
-    if(pos = pList->len)
+    if(pos == pList->len)
     {   
         /* 尾指针需要移动 */
         flag = 1;
@@ -186,7 +186,7 @@ int LinkListDelAppointPos(LinkList * pList, int pos)
     LinkNode * needDelNode = travelNode->next;
     travelNode->next = needDelNode->next;
 
-    if(flag = 1)
+    if(flag)
     {
         pList->tail = travelNode;
     }
@@ -219,7 +219,7 @@ int LinkListDelAppointPos(LinkList * pList, int pos)
 static int LinkListAccordAppointValGetPos(LinkList * pList, ELEMENTTYPE val, int *pPos)
 {
     /* 静态函数只给本源文件的函数用，不需要判断合法性 */
-    int ret = 0;
+    int ret ;
 #if 0
     LinkNode * travelNode = pList->head;
 #else
@@ -243,11 +243,13 @@ static int LinkListAccordAppointValGetPos(LinkList * pList, ELEMENTTYPE val, int
 }
 
 /* 链表删除指定数据 */
-int LinkListDelAppointData(LinkList * pList, ELEMENTTYPE val)
+int LinkListDelAppointData(LinkList * pList, ELEMENTTYPE val, int (*compareFunc)(ELEMENTTYPE val1, ELEMENTTYPE val2))
 {
-    int ret = 0;
 
+    int ret = 0;
+#if 0
     /* 找到要删除的值的位置，就可以复用删除指定位置的函数 */
+
     int pos =0;
     /* 链表的长度 */
     int size = 0;
@@ -258,11 +260,33 @@ int LinkListDelAppointData(LinkList * pList, ELEMENTTYPE val)
     {
         LinkListDelAppointPos(pList, LinkListAccordAppointValGetPos(pList, val, &pos));
     }
-
+#endif
 #if 0
     LinkListAccordAppointValGetPos(pList, val, &pos);
     LinkListDelAppointPos(pList, pos);
 #endif
+
+#if 1
+    /* 遍历：从头开始找哪个位置的值与要删的数据相同 */
+    int pos = 1;
+    LinkNode * travelNode = pList->head->next;
+    while (travelNode != NULL)
+    {
+        
+        travelNode = travelNode->next;
+
+        if(compareFunc(val, travelNode->data))
+        {
+            LinkListDelAppointPos(pList, pos);
+            //printf("%d\n", ret);
+            pos--;
+        }
+        pos++;
+    }
+#endif
+    
+
+
     return ret;
 }
 
@@ -303,7 +327,7 @@ int LinkListDestory(LinkList * pList)
     return ret;
 }
 /* 链表的遍历 */
-int LinkListForeach(LinkList * pList, int (*printfFunc)(ELEMENTTYPE))
+int LinkListForeach(LinkList * pList, int (*printFunc)(ELEMENTTYPE))
 {
 
     /*int (*printfFunc)(ELEMENTTYPE) 是形参，它的实参是printStruct */ 
@@ -313,12 +337,12 @@ int LinkListForeach(LinkList * pList, int (*printfFunc)(ELEMENTTYPE))
         return NULL_PTR;
     }
 #if 0
-    /* travelNode 指向虚拟头结点 */ 
+    /* travelNode 指向虚拟头结点 */ gi
     LinkNode * travelNode = pList->head;
-     while (travelNode != NULL)
+     while (travelNode->next != NULL)
     {
         travelNode = travelNode->next;
-        printf("travelNode->data:\n", travelNode->data);
+        printf("travelNode->data:%d\n", travelNode->data);
     }
 #else
     /* travelNode 指向链表的第一个元素 */
@@ -329,7 +353,7 @@ int LinkListForeach(LinkList * pList, int (*printfFunc)(ELEMENTTYPE))
         printf("travelNode->data:%d\n", travelNode->data);
         #else
         /* 包装器   钩子  回调函数 */
-        printfFunc(travelNode->data);
+        printFunc(travelNode->data);
 
         #endif
         travelNode = travelNode->next;
