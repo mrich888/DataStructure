@@ -117,15 +117,16 @@ int main()
     /* 指定位置删除 */
     LinkListDelAppointPos(list, 2);
 #endif 
-
+#endif
 #if 1
     /* 指定元素删除 */
     //(stuInfo *)&stu1
-    LinkListDelAppointData(list, (stuInfo *)&stu1, compareData);
+    int del = 2;
+    LinkListDelAppointData(list, (void *)&del, compareData);
 #endif 
 
     /* 遍历 */
     LinkListForeach(list, printStruct);
-#endif
+
     return 0;
 }

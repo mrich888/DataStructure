@@ -273,12 +273,14 @@ int LinkListDelAppointData(LinkList * pList, ELEMENTTYPE val, int (*compareFunc)
     while (travelNode != NULL)
     {
         
+        ret = compareFunc(val, travelNode->data);
         travelNode = travelNode->next;
 
-        if(compareFunc(val, travelNode->data))
+        if(ret == 1)
         {
             LinkListDelAppointPos(pList, pos);
             //printf("%d\n", ret);
+            ret = 0;
             pos--;
         }
         pos++;
