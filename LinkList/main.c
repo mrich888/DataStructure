@@ -54,7 +54,7 @@ int main()
     LinkListForeach(list, printBasicData);
 #endif
 
-#if 0
+#if 1
     int buffer[BUFFER_SIZE] = {1, 2, 3};
     /* 插入数据 */
 
@@ -78,7 +78,7 @@ int main()
     
 
 #endif
-#if 1
+#if 0
     stuInfo stu1, stu2, stu3;
     memset(&stu1, 0, sizeof(stu1));
     memset(&stu2, 0, sizeof(stu2));
