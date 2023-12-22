@@ -398,8 +398,16 @@ int DoubleLinkListForeach(DoubleLinkList * pList, int (*printFunc)(ELEMENTTYPE))
         printf("travelNode->data:%d\n", travelNode->data);
     }
 #else
+#if 1
     /* travelNode 指向链表的第一个元素 */
     doubleLinkNode * travelNode = pList->head->next;
+#else
+    /* travelNode 指向链表的最后一个元素 */
+    doubleLinkNode * travelNode = pList->tail;
+
+
+#endif
+
     while (travelNode != NULL)
     {
         #if 0
@@ -412,5 +420,28 @@ int DoubleLinkListForeach(DoubleLinkList * pList, int (*printFunc)(ELEMENTTYPE))
         travelNode = travelNode->next;
     }
 #endif
+    return ret;
+}
+
+int DoubleLinkListBackForeach(DoubleLinkList * pList, int (*printFunc)(ELEMENTTYPE))
+{
+    int ret = 0;
+    if(pList == NULL)
+    {
+        return NULL_PTR;
+    }
+
+    /* travelNode 指向链表的最后一个元素 */
+    doubleLinkNode * travelNode = pList->tail;
+
+    /* 结束条件为头指针和尾指针相同 而不是指向的结点为空 */
+    while (travelNode != pList->head)
+    {
+
+        /* 包装器   钩子  回调函数 */
+        printFunc(travelNode->data);
+
+        travelNode = travelNode->prev;
+    }
     return ret;
 }
