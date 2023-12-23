@@ -59,6 +59,7 @@ int dynamaicArrayInsertData(dynamaicArray *pArray, ELEMENTTYPE val)
 static int expandDynamicCapacity(dynamaicArray *pArray)
 {
     int ret = 0;
+    /* 扩容 */
     int needExpandCapacity = pArray->capacity + (pArray->capacity >> 1);
 
     /* 备份指针 */

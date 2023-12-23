@@ -42,9 +42,9 @@ int main()
 {
 
 
-    doubleLinkList * list = NULL;
+    DoubleLinkList * list = NULL;
     /* 初始化链表 */
-    doubleLinkListInit(&list);
+    DoubleLinkListInit(&list);
 #if 0
     int num = 1;
     doubleLinkListHeadInsert(list,&num);
@@ -60,12 +60,12 @@ int main()
 
     for(int idx = 0; idx < BUFFER_SIZE; idx++)
     {
-        doubleLinkListHeadInsert(list, (void *)&buffer[idx]);
+        DoubleLinkListHeadInsert(list, (void *)&buffer[idx]);
     }
   
     /* 获取链表的长度 */
     int size = 0;
-    doubleLinkListGetLength(list, &size);
+    DoubleLinkListGetLength(list, &size);
     printf("size:%d\n", size);
 
     
@@ -73,7 +73,8 @@ int main()
     // doubleLinkListGetLength(list, &size);
     // printf("size:%d\n", size);
 
-    doubleLinkListForeach(list, printBasicData);
+    //doubleLinkListForeach(list, printBasicData);
+    DoubleLinkListBackForeach(list, printBasicData);
 
     
 
@@ -118,7 +119,7 @@ int main()
     doubleLinkListDelAppointPos(list, 2);
 #endif 
 #endif
-#if 1
+#if 0
     /* 指定元素删除 */
     //(stuInfo *)&stu1
     int del = 2;
@@ -126,7 +127,7 @@ int main()
 #endif 
 
     /* 遍历 */
-    doubleLinkListForeach(list, printStruct);
+    //doubleLinkListForeach(list, printStruct);
 
     return 0;
 }

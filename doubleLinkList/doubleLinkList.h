@@ -4,23 +4,23 @@
 #define ELEMENTTYPE void * 
 
 /* 链表结点 取别名*/
-typedef struct doubleLinkNode
+typedef struct DoubleLinkNode
 {
     ELEMENTTYPE data;
 
     /*指向前一个结点的指针 */
-    struct doubleLinkNode * prev;
+    struct DoubleLinkNode * prev;
     /* 指向下一个结点的指针 */
-    struct doubleLinkNode *next; /* 指针类型 */
+    struct DoubleLinkNode *next; /* 指针类型 */
 
 
-}doubleLinkNode;
+}DoubleLinkNode;
 
 /* 链表 */
 typedef struct DoubleLinkList
 {
-    doubleLinkNode * head;  /* 链表的虚拟头结点 */
-    doubleLinkNode * tail;  /* 为什么尾指针不需要分配空间 */
+    DoubleLinkNode * head;  /* 链表的虚拟头结点 */
+    DoubleLinkNode * tail;  /* 为什么尾指针不需要分配空间 */
     int len;          /* 链表长度 */
 
 }DoubleLinkList;

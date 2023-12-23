@@ -296,6 +296,8 @@ int LinkListDelAppointData(LinkList * pList, ELEMENTTYPE val,int (*compareFunc)(
         pos++;
     }
 #endif
+    
+
 
     return ret;
 }
