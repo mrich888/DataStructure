@@ -11,6 +11,26 @@ enum STATUS_CODE
     INVALID_ACCESS,
 };
 
+static int compareFunc(ELEMENTTYPE val1, ELEMENTTYPE val2)
+{
+    #if 0
+    if(val1 < val2)
+    {
+        return -1;
+    }
+    else if (val1 > val2)
+    {
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
+    #endif
+    return val1 - val2;
+    
+}
+
 /* 二叉搜索树的初始化 */
 int binarySearchTreeInit(BinarySearchTree **pBstree)
 {
@@ -37,10 +57,13 @@ int binarySearchTreeInit(BinarySearchTree **pBstree)
     memset(bstree->root, 0, sizeof(BSTreeNode) * 1);
     
     /* 初始化根结点 */
-    bstree->root->data = 0;
-    bstree->root->left = NULL;
-    bstree->root->right = NULL;
-    bstree->root->parent = NULL;
+    {
+        bstree->root->data = 0;
+        bstree->root->left = NULL;
+        bstree->root->right = NULL;
+        bstree->root->parent = NULL;
+    }
+    
 
     *pBstree = bstree;
 
@@ -48,8 +71,81 @@ int binarySearchTreeInit(BinarySearchTree **pBstree)
 }
 
 /* 二叉搜索树的插入 */
-int binarySearchTreeInsert(BinarySearchTree **pBstree, ELEMENTTYPE val)
+int binarySearchTreeInsert(BinarySearchTree *pBstree, ELEMENTTYPE val)
 {
     int ret = 0;
+    /* 如果是空树，直接插入 */
+    if (pBstree->size == 0)
+    {
+        /* 更新数的结点 */
+        (pBstree->size)++;
+
+        pBstree->root->data = val;
+        return ret;
+    }
+
+    /* 不为空，找到对应的父结点为止。即遍历指针停在差啊 */
+    /* travelNode 指向根结点 */
+    BSTreeNode * travelNode = pBstree->root;
+    BSTreeNode * parentNode = pBstree->root;
+
+    /* 根据符号确定到底放左边还是右边 */
+    int cmp = compareFunc(val, travelNode->data);
+    while (travelNode->data != NULL)
+    {
+        /* 标记父结点 */
+        parentNode = travelNode;
+        cmp = val - travelNode->data;
+        
+        /* 插入元素 < 遍历到的结点 travleNode往左遍历 */
+        if(cmp < 0)
+        {
+            travelNode = travelNode->left;
+        }
+        /* 插入元素 > 遍历到的结点 travleNode往左遍历 */
+        else if(cmp > 0)
+        {  
+            travelNode = travelNode->right;
+        }
+        else
+        {
+            /* 插入元素 = 遍历到的结点 */
+            return ret;//按需求返回还是插入
+        }
+    }
+
+    /* 封装新结点 */
+    BSTreeNode * newBstNode = (BSTreeNode *)malloc(sizeof(BSTreeNode) * 1);
+    
+    if (newBstNode == NULL)
+    {
+        return MALLOC_ERROR;
+    }
+    memset(newBstNode, 0, sizeof(BSTreeNode) * 1);
+    
+    /* 初始化根结点 */
+    {
+        newBstNode->data = 0;
+        newBstNode->left = NULL;
+        newBstNode->right = NULL;
+        newBstNode->parent = NULL;
+    }
+    /* 新结点赋值 */
+    newBstNode->data = val;
+    /* 挂在左子树 */
+    if(cmp < 0)
+    {
+        parentNode->left = newBstNode;
+    }
+    else
+    {
+        /*挂在右子树 */
+        parentNode->left = newBstNode;
+    }
+    
+    newBstNode->parent = parentNode;
+
+    /* 更新树的结点 */
+    (pBstree->size)++;    
     return ret;
 }
