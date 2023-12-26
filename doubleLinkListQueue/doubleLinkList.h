@@ -1,31 +1,7 @@
-#ifndef __doubleLinkList_H_
-#define __doubleLinkList_H_
+#ifndef __DOUBLELINKLIST_H_
+#define __DOUBLELINKLIST_H_
 
-#define ELEMENTTYPE void * 
-
-/* 链表结点 取别名*/
-typedef struct doubleLinkNode
-{
-    ELEMENTTYPE data;
-
-    /*指向前一个结点的指针 */
-    struct doubleLinkNode * prev;
-    /* 指向下一个结点的指针 */
-    struct doubleLinkNode *next; /* 指针类型 */
-
-
-}doubleLinkNode;
-
-/* 链表 */
-typedef struct doubleLinkList
-{
-    doubleLinkNode * head;  /* 链表的虚拟头结点 */
-    doubleLinkNode * tail;  /* 为什么尾指针不需要分配空间 */
-    int len;          /* 链表长度 */
-
-}doubleLinkList;
-
-
+#include "common.h"
 
 /* 链表初始化 */
 int doubleLinkListInit(doubleLinkList ** pList);
@@ -64,5 +40,13 @@ int doubleLinkListForeach(doubleLinkList * pList, int (*printFunc)(ELEMENTTYPE))
 /* 链表逆序遍历 */
 int doubleLinkListBackForeach(doubleLinkList * pList, int (*printFunc)(ELEMENTTYPE));
 
+/* 获取链表 头位置值 */
+int doubleLinkListGetHeadVal(doubleLinkList * pList, ELEMENTTYPE *val);
+
+/* 获取链表 尾位置值 */
+int doubleLinkListGetTailVal(doubleLinkList * pList, ELEMENTTYPE *val);
+
+/* 获取链表 指定位置值 */
+int doubleLinkListGetAppointPosVal(doubleLinkList * pList, int pos, ELEMENTTYPE *val);
 
 #endif //__doubleLinkList_H_

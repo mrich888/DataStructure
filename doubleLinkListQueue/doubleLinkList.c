@@ -1,5 +1,5 @@
-#include <stdio.h>
 #include "doubleLinkList.h"
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -14,7 +14,7 @@ enum STATUS_CODE
 };
 /* 静态前置声明 */
 /* 静态函数只在本源文件（.c）使用 */
-static int doubleLinkListAccordAppointValGetPos(doubleLinkList * pList, ELEMENTTYPE val, int *pPos, int (*compareFunc)(ELEMENTTYPE , ELEMENTTYPE ));
+static int doubleLinkListAccordAppointValGetPos(doubleLinkList * pList, ELEMENTTYPE val, int *pPos, int (*compareFunc)(ELEMENTTYPE , ELEMENTTYPE));
 /* 封装新结点成函数 */
 static doubleLinkNode * createdoubleLinkNode (ELEMENTTYPE val);
 
@@ -445,4 +445,36 @@ int doubleLinkListBackForeach(doubleLinkList * pList, int (*printFunc)(ELEMENTTY
         travelNode = travelNode->prev;
     }
     return ret;
+}
+
+/* 获取链表 头位置值 */
+int doubleLinkListGetHeadVal(doubleLinkList * pList, ELEMENTTYPE *pVal)
+{
+    #if 0
+    return doubleLinkListGetAppointPosVal(pList, 0, pVal);
+    #else
+    int ret = 0;
+    if(pList == NULL)
+    {
+        return NULL_PTR;
+    }
+
+    if(pVal)
+    {
+        *pVal = pList->head->next->data;
+    }
+
+    return ret;
+    #endif
+}
+/* 获取链表 尾位置值 */
+int doubleLinkListGetTailVal(doubleLinkList * pList, ELEMENTTYPE *pVal)
+{
+    return doubleLinkListGetAppointPosVal(pList, pList->len, pVal);
+}
+/* 获取链表 指定位置值 */
+int doubleLinkListGetAppointPosVal(doubleLinkList * pList, int pos, ELEMENTTYPE *pVal)
+{
+    /* todo... */
+
 }
