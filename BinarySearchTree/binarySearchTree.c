@@ -588,6 +588,7 @@ static int binarySearchTreeDeleteNode(BinarySearchTree *pBstree ,BSTreeNode * no
     }
 #else
     BSTreeNode * child = node->left != NULL ? node->left : node->right;
+    BSTreeNode * delNode = NULL;
     /* 只有一个孩子，只要不为空就是有孩子，并且知道了是左孩子还是有孩子 */
     if (child)
     {
@@ -598,12 +599,15 @@ static int binarySearchTreeDeleteNode(BinarySearchTree *pBstree ,BSTreeNode * no
         {
             /* 度为一且它是根节点 */
             pBstree->root = child;
+            delNode = node;
+            #if 0
             /* 释放结点 */
             if (node)
             {
                 free(node);
                 node = NULL;
             }
+            #endif
         }
         else
         {
@@ -617,21 +621,27 @@ static int binarySearchTreeDeleteNode(BinarySearchTree *pBstree ,BSTreeNode * no
             {
                 node->parent->right = child;
             }
+            delNode = node;
         }
     }
     else
     {
         /* 度为0 */
+        delNode = node;
+        #if 0
         if (node)
         {
             free(node);
             node = NULL;
         }
+        #endif
+    }
+    if (delNode)
+    {
+        free(delNode);
+        delNode = NULL;
     }
 #endif   
-   
-
-
 }
 
 
