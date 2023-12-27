@@ -106,6 +106,30 @@ static int binarySearchTreeNodeHasIsLeaf(BSTreeNode * node)
     return( node->left == NULL && node->right == NULL);
 }
 
+/* 获取当前结点的前驱结点 */
+static BSTreeNode * bsTreeNodeProDeccessor(BSTreeNode * node)
+{
+    
+    if (node ->left != NULL)
+    {
+        BSTreeNode * travelNode = node->left;
+        while (travelNode->right != NULL)
+        {
+            travelNode = travelNode->right;
+        }
+        return travelNode; 
+    }
+    /* 程序到这一定没有左子树，那就需要向父结点找 */
+    while (node->parent != NULL && node == node->parent->left)
+    {
+        node = node->parent;
+    }
+    /* node->parent == null */
+    /* node == node->parent->right */
+    return node->parent;
+}
+/* 获取当前结点的后继结点 */
+static BSTreeNode * bsTreeNodeProSuccessor(BSTreeNode * node);
 
 /* 二叉搜索树的初始化 */
 int binarySearchTreeInit(BinarySearchTree **pBstree,  int(*compareFunc)(ELEMENTTYPE val1, ELEMENTTYPE val2), int(*printFunc)(ELEMENTTYPE val))
@@ -158,7 +182,6 @@ int binarySearchTreeInit(BinarySearchTree **pBstree,  int(*compareFunc)(ELEMENTT
 
     return ret;
 }
-
 
 /* 二叉搜索树的插入 */
 int binarySearchTreeInsert(BinarySearchTree *pBstree, ELEMENTTYPE val)
@@ -250,7 +273,6 @@ static BSTreeNode * baseAppointValGetBSTreeNode(BinarySearchTree *pBstree, ELEME
     return NULL;
 }
 
-
 /* 二叉搜索树是否包含指定元素 */
 int binarySearchTreeIsContainAppointVal(BinarySearchTree *pBstree, ELEMENTTYPE val)
 {
@@ -269,7 +291,6 @@ static int preOrderTravel(BinarySearchTree *pBstree, BSTreeNode * node)
     preOrderTravel(pBstree, node->left);
     preOrderTravel(pBstree, node->right);
 }
-
 /* 二叉搜索树的前序遍历 */
 int binarySearchTreePreOrderTravel(BinarySearchTree *pBstree)
 {
@@ -291,7 +312,6 @@ static int inOrderTravel(BinarySearchTree *pBstree, BSTreeNode * node)
     pBstree->printFunc(node->data);
     inOrderTravel(pBstree, node->right);
 }
-
 /* 二叉搜索树的中序遍历 */
 int binarySearchTreeInOrderTravel(BinarySearchTree *pBstree)
 {
@@ -312,7 +332,6 @@ static int postOrderTravel(BinarySearchTree *pBstree, BSTreeNode * node)
     postOrderTravel(pBstree, node->right);
     pBstree->printFunc(node->data);
 }
-
 /* 二叉搜索树的后序遍历 */
 int binarySearchTreePostOrderTravel(BinarySearchTree *pBstree)
 {
@@ -362,13 +381,14 @@ int binarySearchTreeLevelOrderTravel(BinarySearchTree *pBstree)
     return ret;
 }
 
+/* 树的高度 */
 int binarySearchTreeGetHeight(BinarySearchTree *pBstree, int * pHeight)
 {
     int ret = 0;
     /* 判断树是否为空 */
     if (pBstree == NULL)
     {   
-        return 0;
+        return NULL;
     }
     /* 判断是否有结点 */
     if (pBstree->size == 0)
@@ -405,6 +425,7 @@ int binarySearchTreeGetHeight(BinarySearchTree *pBstree, int * pHeight)
         {
             doublelinklistQueuePush(queue, BstVal->right);
         }
+        /* 当前层的结点未完全输出时，不会去获取此时队列中的元素长度 */
         /* 树的当前层结点遍历结束 */
         if (levelSize == 0)
         {
