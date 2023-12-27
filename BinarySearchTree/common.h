@@ -16,4 +16,13 @@ typedef struct doubleLinkNode
 
 }doubleLinkNode;
 
+/* 链表 */
+typedef struct doubleLinkList
+{
+    doubleLinkNode * head;  /* 链表的虚拟头结点 */
+    doubleLinkNode * tail;  /* 为什么尾指针不需要分配空间 */
+    int len;          /* 链表长度 */
+
+}doubleLinkList;
+
 #endif

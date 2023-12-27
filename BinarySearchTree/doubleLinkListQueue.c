@@ -1,5 +1,5 @@
 #include "doubleLinkListQueue.h"
-
+#include "doubleLinkList.h"
 
 /* 初始化 */
 int doubleLinkListQueueInit(doubleLinkListQueue **pQueue)
@@ -7,10 +7,10 @@ int doubleLinkListQueueInit(doubleLinkListQueue **pQueue)
     return doubleLinkListInit(pQueue);
 }
 
-/* 入队 */
+/* 入队 = 链表尾插 */
 int doubleLinkListQueuePush(doubleLinkListQueue *pQueue, ELEMENTTYPE val)
 {
-    return doubleLinkListHeadInsert(pQueue, val);
+    return doubleLinkListTailInsert(pQueue, val);
 }
 
 /* 队头元素 */
@@ -25,7 +25,7 @@ int doubleLinkListQueueRear(doubleLinkListQueue *pQueue, ELEMENTTYPE *pval)
     doubleLinkListGetTailVal(pQueue, pval);
 }
 
-/* 队列出队 */
+/* 队列出队 = 链表头删 */
 int doubleLinkListQueuePop(doubleLinkListQueue *pQueue)
 {
     doubleLinkListHeadDel(pQueue);
