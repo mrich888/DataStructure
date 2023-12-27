@@ -109,10 +109,10 @@ static int binarySearchTreeNodeHasIsLeaf(BSTreeNode * node)
 /* 获取当前结点的前驱结点 */
 static BSTreeNode * bsTreeNodeProDeccessor(BSTreeNode * node)
 {
-    
     if (node ->left != NULL)
     {
         BSTreeNode * travelNode = node->left;
+        /* 先判断它的右子树是否为空 */
         while (travelNode->right != NULL)
         {
             travelNode = travelNode->right;
@@ -129,7 +129,26 @@ static BSTreeNode * bsTreeNodeProDeccessor(BSTreeNode * node)
     return node->parent;
 }
 /* 获取当前结点的后继结点 */
-static BSTreeNode * bsTreeNodeProSuccessor(BSTreeNode * node);
+static BSTreeNode * bsTreeNodeProSuccessor(BSTreeNode * node)
+{
+    if (node->right != NULL)
+    {
+        BSTreeNode * travelNode = node->right;
+        while (travelNode->left != NULL)
+        {
+            travelNode = travelNode->left;
+        }
+        return travelNode; 
+    }
+    /* 程序到这一定没有右子树，那就需要向父结点找 */
+    while (node->parent != NULL && node == node->parent->right)
+    {
+        node = node->parent;
+    }
+    /* node->parent == null */
+    /* node == node->parent->left */
+    return node->parent;
+}
 
 /* 二叉搜索树的初始化 */
 int binarySearchTreeInit(BinarySearchTree **pBstree,  int(*compareFunc)(ELEMENTTYPE val1, ELEMENTTYPE val2), int(*printFunc)(ELEMENTTYPE val))
