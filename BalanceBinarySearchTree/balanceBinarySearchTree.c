@@ -48,6 +48,9 @@ static int AVLTreeNodeBalanceFactor(AVLTreeNode *node);
 static int AVLTreeNodeUpdateHeight(AVLTreeNode *node);
 /* AVL树调整平衡 */
 static int AVLTreeNodeAdjustBalance(BalanceBinarySearchTree *pBstree, AVLTreeNode *node);
+/* 获取AVL结点较高的子结点 */ 
+static  AVLTreeNode * AVLTreeNodeGetChildTaller(AVLTreeNode *node);
+
 /* 旋转 */
 
 
@@ -208,9 +211,71 @@ static int AVLTreeNodeUpdateHeight(AVLTreeNode *node)
 
     return ret;
 }
+
+/* 获取AVL结点较高的子结点 */
+static  AVLTreeNode * AVLTreeNodeGetChildTaller(AVLTreeNode *node)
+{
+    /* 左子树的高度 */
+    int leftHeight = node->left == NULL ? 0 : node->left->height;
+    /* 右子树的高度 */
+    int rightHeight = node->right == NULL ? 0 : node->right->height;
+    if (leftHeight > rightHeight)
+    {
+        return node->left;
+    }
+    else if (leftHeight < rightHeight)
+    {
+        return node->right;
+    }
+    else
+    {
+        if (node->parent != NULL && node == node->parent->left)
+        {
+            return node->left;
+        }
+        else
+        {
+            return node->right;
+        }
+    }
+
+}
+
 /* 调整平衡 */
+/* node一定是最低的不平衡结点 */
 static int AVLTreeNodeAdjustBalance(BalanceBinarySearchTree *pBstree, AVLTreeNode *node)
 {
+    /* LL LR RL RR */
+    AVLTreeNode * parent =  AVLTreeNodeGetChildTaller(node);
+    AVLTreeNode * child =  AVLTreeNodeGetChildTaller(parent);
+
+    /* 左 */
+    if (parent == node->left)
+    {
+        if (child == parent->left)
+        {
+            /* LL */
+        }
+        else
+        {
+            /* LR */
+
+        }
+    }
+    else
+    {
+        if (child == parent->left)
+        {
+            /* RL */
+        }
+        else
+        {
+            /* RR */
+
+        }
+
+    }
+
 
 }
 
