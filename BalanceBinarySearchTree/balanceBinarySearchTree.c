@@ -40,7 +40,7 @@ static AVLTreeNode * bstreeNodePreDecessor(AVLTreeNode *node);
 static AVLTreeNode * bstreeNodeSuccessor(AVLTreeNode *node);
 /* 二叉搜索树删除指定的结点 */
 static int balanceBinarySearchTreeDeleteNode(BalanceBinarySearchTree *pBstree, AVLTreeNode *node);
-/* 调整之后的 */
+/* 插入之后的操作 */
 static int insertNodeAfter(BalanceBinarySearchTree *pBstree, AVLTreeNode *node);
 /* 计算结点的平衡因子 */
 static int AVLTreeNodeBalanceFactor(AVLTreeNode *node);
@@ -58,6 +58,10 @@ static AVLTreeCurrentNodeIsRight(AVLTreeNode *node);
 static AVLTreeNodeCurrentNodeRotateRight(BalanceBinarySearchTree *pBstree, AVLTreeNode *grand);
 /* 左旋转 */
 static AVLTreeNodeCurrentNodeRotateLeft(BalanceBinarySearchTree *pBstree, AVLTreeNode *grand);
+/* 旋转 */
+static int AVLTreeNodeRotate(BalanceBinarySearchTree *pBstree, AVLTreeNode *grand, AVLTreeNode * parent, AVLTreeNode *child);
+/* 删除之后的操作 */
+static int removeNodeAfter(BalanceBinarySearchTree *pBstree, AVLTreeNode *node);
 
 #if 0
 static int compareFunc(ELEMENTTYPE val1, ELEMENTTYPE val2)
@@ -368,6 +372,7 @@ static AVLTreeNodeCurrentNodeRotateLeft(BalanceBinarySearchTree *pBstree, AVLTre
     return ret;
 }
 
+
 /* 调整平衡 */
 /* node一定是最低的不平衡结点 */
 static int AVLTreeNodeAdjustBalance(BalanceBinarySearchTree *pBstree, AVLTreeNode *node)
@@ -382,24 +387,26 @@ static int AVLTreeNodeAdjustBalance(BalanceBinarySearchTree *pBstree, AVLTreeNod
         if (AVLTreeCurrentNodeIsLeft(child))
         {
             /* LL */
-            AVLTreeNodeCurrentNodeRotateRight(node);
+            AVLTreeNodeCurrentNodeRotateRight(pBstree ,node);
         }
         else if (AVLTreeCurrentNodeIsRight(child))
         {
             /* LR */
-
+            AVLTreeNodeCurrentNodeRotateLeft(pBstree ,node);
+            AVLTreeNodeCurrentNodeRotateRight(pBstree ,node);
         }
     }
     else
     {
         if (AVLTreeCurrentNodeIsLeft(child))
         {
-            /* RL */
+            AVLTreeNodeCurrentNodeRotateRight(pBstree ,node);
+            AVLTreeNodeCurrentNodeRotateLeft(pBstree ,node);   
         }
         else if (AVLTreeCurrentNodeIsRight(child))
         {
             /* RR */
-
+            AVLTreeNodeCurrentNodeRotateLeft(pBstree, node);
         }
 
     }
@@ -844,8 +851,9 @@ static int balanceBinarySearchTreeDeleteNode(BalanceBinarySearchTree *pBstree, A
         {
             /* 度为1 且 它是根结点 */
             pBstree->root = child;
-
             delNode = node;
+            /* 删除结点 */
+            removeNodeAfter(pBstree, delNode);
             #if 0
             if (node)
             {   
@@ -902,9 +910,8 @@ static int balanceBinarySearchTreeDeleteNode(BalanceBinarySearchTree *pBstree, A
             {
                 node->parent->right = NULL;
             }
-
-
             delNode = node;
+            removeNodeAfter(pBstree, delNode);
             #if 0
             if (node)
             {
@@ -991,6 +998,35 @@ int balanceBinarySearchTreeDestroy(BalanceBinarySearchTree *pBstree)
     }
     return ret;
 }
+
+/* 删除之后的操作 */
+/* node是要删除的结点*/
+static int removeNodeAfter(BalanceBinarySearchTree *pBstree, AVLTreeNode *node)
+{   
+    int ret = 0;
+    /*  时间复杂度是O（logN）*/
+    while ((node = node->parent) != NULL)
+    {
+        /* 程序执行到这里的时候，一定不止一个结点 */
+        if (AVLTreeNodeIsBalanced(node))
+        {
+           /* 如果结点是平衡的 ，那就需要更新高度 */ 
+           AVLTreeNodeUpdateHeight(node);
+        }
+        else
+        {
+        /* 此时node是最低不平衡结点 */
+        /* 开始调整平衡 */
+        AVLTreeNodeAdjustBalance(pBstree, node);
+
+        /* 调整完最低不平衡结点，上面的不平衡结点就会恢复平衡 */
+
+        }
+    }
+    return ret;
+}
+
+
 
 
 /* 判断二叉搜索树是否是完全二叉树 */
