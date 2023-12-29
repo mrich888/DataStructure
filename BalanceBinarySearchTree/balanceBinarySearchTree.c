@@ -256,15 +256,9 @@ static AVLTreeCurrentNodeIsRight(AVLTreeNode *node)
     return (node->parent != NULL)&&(node == node->parent->right);
 }
 
-/* 右旋转 */
-static AVLTreeNodeCurrentNodeRotateRight(BalanceBinarySearchTree *pBstree, AVLTreeNode *grand)
+/* 旋转 */
+static int AVLTreeNodeRotate(BalanceBinarySearchTree *pBstree, AVLTreeNode *grand, AVLTreeNode * parent, AVLTreeNode *child)
 {
-    int ret = 0;
-    /* 一定是LL */
-    AVLTreeNode * parent = grand->left;
-    AVLTreeNode * child = parent->right;
-    grand->left = child;
-    parent->right = grand;
     parent->parent = grand->parent;
     /* 是左挂左 */
     if (AVLTreeCurrentNodeIsLeft(grand))
@@ -291,7 +285,47 @@ static AVLTreeNodeCurrentNodeRotateRight(BalanceBinarySearchTree *pBstree, AVLTr
     /* 更新高度 */
     AVLTreeNodeUpdateHeight(grand);
     AVLTreeNodeUpdateHeight(parent);
+}
 
+/* 右旋转 */
+static AVLTreeNodeCurrentNodeRotateRight(BalanceBinarySearchTree *pBstree, AVLTreeNode *grand)
+{
+    int ret = 0;
+    /* 一定是LL */
+    AVLTreeNode * parent = grand->left;
+    AVLTreeNode * child = parent->right;
+    grand->left = child;
+    parent->right = grand;
+#if 0
+    parent->parent = grand->parent;
+    /* 是左挂左 */
+    if (AVLTreeCurrentNodeIsLeft(grand))
+    {
+        grand->parent->left = parent;
+    }
+    else if (AVLTreeCurrentNodeIsRight(grand))
+    {
+        grand->parent->right = parent;
+    }
+    else
+    {
+        /* parent成为树的根结点 */
+        pBstree->root = parent;
+    }
+    
+    grand->parent = parent;
+
+    if (child != NULL)
+    {
+        child->parent = grand;
+    }
+
+    /* 更新高度 */
+    AVLTreeNodeUpdateHeight(grand);
+    AVLTreeNodeUpdateHeight(parent);
+#else
+    AVLTreeNodeRotate(pBstree, grand, parent, child);
+#endif
     return ret;
 }
 
@@ -305,10 +339,11 @@ static AVLTreeNodeCurrentNodeRotateLeft(BalanceBinarySearchTree *pBstree, AVLTre
 
     grand->right = child;  //1
     parent->left = grand;  //2
-    /* parent成为新的根结点 */
+#if 0
+      /* parent成为新的根结点 */
     parent->parent = grand->parent;
     
-    if (AVLTreeCurrentNodeIsRight(grand))
+    if (AVLTreeCurrentNodeIsRight(grand))//3
     {
         grand->parent->right = parent;
     }
@@ -327,11 +362,9 @@ static AVLTreeNodeCurrentNodeRotateLeft(BalanceBinarySearchTree *pBstree, AVLTre
     {
         child->parent = grand;
     }
-    
-    /* 更新高度 */
-    AVLTreeNodeUpdateHeight(grand);
-    AVLTreeNodeUpdateHeight(parent);
-
+#else
+    AVLTreeNodeRotate(pBstree, grand, parent, child);
+#endif
     return ret;
 }
 
