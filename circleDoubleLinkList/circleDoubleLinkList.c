@@ -264,10 +264,16 @@ int CircleDoubleLinkListDestory(CircleDoubleLinkList * pList)
         CircleDoubleLinkListHeadDel(pList);
     }
 
-    if(pList->head->next != pList->head)
+    if(pList->head != NULL)
     {
-        free(pList->head );
+        free(pList->head);
         pList->head = NULL;
+    }
+
+    if(pList != NULL)
+    {
+        free(pList);
+        pList = NULL;
     }
     return ret;
 }

@@ -3,7 +3,7 @@
 
 /* 避免头文件重复包含 */
 
-typedef int ELEMENTTYPE;
+typedef void * ELEMENTTYPE;
 
 typedef struct dynamaicArray
 {

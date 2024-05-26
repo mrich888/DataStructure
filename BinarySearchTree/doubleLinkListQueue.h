@@ -2,6 +2,7 @@
 #define __DOUBLELINKLIST_QUEUE_H_
 
 #include "common.h"
+#include "doubleLinkList.h"
 
 typedef doubleLinkList doubleLinkListQueue;
 
@@ -12,10 +13,10 @@ int doubleLinkListQueueInit(doubleLinkListQueue **pQueue);
 int doubleLinkListQueuePush(doubleLinkListQueue *pQueue, ELEMENTTYPE val);
 
 /* 队头元素 */
-int doubleLinkListQueueTop(doubleLinkListQueue *pQueue, ELEMENTTYPE pval);
+int doubleLinkListQueueTop(doubleLinkListQueue *pQueue, ELEMENTTYPE * pval);
 
 /* 队尾元素 */
-int doubleLinkListQueueRear(doubleLinkListQueue *pQueue, ELEMENTTYPE pval);
+int doubleLinkListQueueRear(doubleLinkListQueue *pQueue, ELEMENTTYPE * pval);
 
 /* 队列出队 */
 int doubleLinkListQueuePop(doubleLinkListQueue *pQueue);

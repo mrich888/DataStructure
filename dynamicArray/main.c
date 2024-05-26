@@ -12,6 +12,7 @@ typedef struct stuInfo
 } stuInfo; 
 
 
+
 int compareData(void *arg1, void *arg2)
 {
     int num1 = *(int *)arg1;

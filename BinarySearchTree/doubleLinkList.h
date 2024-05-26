@@ -44,9 +44,9 @@ int doubleLinkListBackForeach(doubleLinkList * pList, int (*printFunc)(ELEMENTTY
 int doubleLinkListGetHeadVal(doubleLinkList * pList, ELEMENTTYPE *val);
 
 /* 获取链表 尾位置值 */
-int doubleLinkListGetTailVal(doubleLinkList * pList, ELEMENTTYPE *val);
+int doubleLinkListGetTailVal(doubleLinkList * pList, ELEMENTTYPE * val);
 
 /* 获取链表 指定位置值 */
-int doubleLinkListGetAppointPosVal(doubleLinkList * pList, int pos, ELEMENTTYPE *val);
+int doubleLinkListGetAppointPosVal(doubleLinkList * pList, int pos, ELEMENTTYPE val);
 
 #endif //__doubleLinkList_H_

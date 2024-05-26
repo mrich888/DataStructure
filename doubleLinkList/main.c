@@ -74,6 +74,7 @@ int main()
     // printf("size:%d\n", size);
 
     //doubleLinkListForeach(list, printBasicData);
+    DoubleLinkListDestory(list);
     DoubleLinkListBackForeach(list, printBasicData);
 
     

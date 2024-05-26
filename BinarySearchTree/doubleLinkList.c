@@ -175,13 +175,13 @@ int doubleLinkListAppointPosInsert(doubleLinkList * pList, int pos, ELEMENTTYPE 
 int doubleLinkListHeadDel(doubleLinkList * pList)
 {
     /* todo... */
-    return doubleLinkListDelAppointPos(pList, 1);
+    return doubleLinkListDelAppointPos(pList, 0);
 }
 
 /* 链表尾删*/
 int doubleLinkListTailDel(doubleLinkList * pList)
 {
-    return doubleLinkListDelAppointPos(pList, pList->len);
+    return doubleLinkListDelAppointPos(pList, pList->len - 1);
 }
 
 /* 链表指定位置删除 */
@@ -193,7 +193,7 @@ int doubleLinkListDelAppointPos(doubleLinkList * pList, int pos)
         return NULL_PTR;
     }
     /* 临界值：你必须要有数据才能删，故pos必须得大于0 */
-    if(pos <= 0 || pos > pList->len ) 
+    if(pos < 0 || pos >= pList->len ) 
     {
         return INVALID_ACCESS;
     }
@@ -223,7 +223,7 @@ int doubleLinkListDelAppointPos(doubleLinkList * pList, int pos)
     }
     else
     {
-        while(--pos)
+        while(pos--)
         {
         /* 向后移动位置 */
             travelNode = travelNode->next;
@@ -231,7 +231,16 @@ int doubleLinkListDelAppointPos(doubleLinkList * pList, int pos)
         //跳出循环找到的是哪一个结点？
         needDelNode = travelNode->next;
         travelNode->next = needDelNode->next;
-        needDelNode->next->prev = travelNode;/* 尾删不可以 */
+        if (needDelNode->next != NULL)
+        {
+            needDelNode->next->prev = travelNode;/* 尾删不可以 */
+        }
+        else
+        {
+            pList->tail = pList->tail->prev;
+        }
+        
+       
     }  
 #if 0
     if(travelNode->next != NULL)
@@ -263,7 +272,7 @@ static int doubleLinkListAccordAppointValGetPos(doubleLinkList * pList, ELEMENTT
 #if 0
     doubleLinkNode * travelNode = pList->head;
 #else
-    int pos = 1;
+    int pos = 0;
     doubleLinkNode * travelNode = pList->head->next;
 #endif
     int cmp = 0;
@@ -297,7 +306,6 @@ int doubleLinkListDelAppointData(doubleLinkList * pList, ELEMENTTYPE val,int (*c
 {
 
     int ret = 0;
-#if 1
     /* 找到要删除的值的位置，就可以复用删除指定位置的函数 */
 
     int pos =0;
@@ -306,40 +314,13 @@ int doubleLinkListDelAppointData(doubleLinkList * pList, ELEMENTTYPE val,int (*c
 
     /* 需要遍历链表全部去找 */
     /* 但可能存在 不只一个满足条件的值 // 没有满足条件的值 */
-    while (doubleLinkListGetLength(pList, &size) && pos != NOT_FIN)
+    
+    while (doubleLinkListAccordAppointValGetPos(pList, val, &pos, compareFunc) != NOT_FIN)
     {
         doubleLinkListAccordAppointValGetPos(pList, val, &pos, compareFunc);
         doubleLinkListDelAppointPos(pList, pos);
     }
-#endif
-#if 0
-    doubleLinkListAccordAppointValGetPos(pList, val, &pos);
-    doubleLinkListDelAppointPos(pList, pos);
-#endif
-
-#if 0
-    /* 遍历：从头开始找哪个位置的值与要删的数据相同 */
-    int pos = 1;
-    doubleLinkNode * travelNode = pList->head->next;
-    while (travelNode != NULL)
-    {
         
-        ret = compareFunc(val, travelNode->data);
-        travelNode = travelNode->next;
-
-        if(ret == 1)
-        {
-            doubleLinkListDelAppointPos(pList, pos);
-            //printf("%d\n", ret);
-            ret = 0;
-            pos--;
-        }
-        pos++;
-    }
-#endif
-    
-
-
     return ret;
 }
 
@@ -369,6 +350,8 @@ int doubleLinkListDestory(doubleLinkList * pList)
     while (doubleLinkListGetLength(pList, &size))
     {
         doubleLinkListHeadDel(pList);
+        pList->head = NULL;
+        pList->tail = NULL;
     }
 
     if(pList->head != NULL)
@@ -448,7 +431,7 @@ int doubleLinkListBackForeach(doubleLinkList * pList, int (*printFunc)(ELEMENTTY
 }
 
 /* 获取链表 头位置值 */
-int doubleLinkListGetHeadVal(doubleLinkList * pList, ELEMENTTYPE pVal)
+int doubleLinkListGetHeadVal(doubleLinkList * pList, ELEMENTTYPE * pVal)
 {
     #if 0
     return doubleLinkListGetAppointPosVal(pList, 0, pVal);
@@ -461,19 +444,19 @@ int doubleLinkListGetHeadVal(doubleLinkList * pList, ELEMENTTYPE pVal)
 
     if(pVal)
     {
-        pVal = pList->head->next->data;
+        *pVal = pList->head->next->data;
     }
 
     return ret;
     #endif
 }
 /* 获取链表 尾位置值 */
-int doubleLinkListGetTailVal(doubleLinkList * pList, ELEMENTTYPE *pVal)
+int doubleLinkListGetTailVal(doubleLinkList * pList, ELEMENTTYPE* pVal)
 {
     return doubleLinkListGetAppointPosVal(pList, pList->len, pVal);
 }
 /* 获取链表 指定位置值 */
-int doubleLinkListGetAppointPosVal(doubleLinkList * pList, int pos, ELEMENTTYPE *pVal)
+int doubleLinkListGetAppointPosVal(doubleLinkList * pList, int pos, ELEMENTTYPE pVal)
 {
     /* todo... */
 

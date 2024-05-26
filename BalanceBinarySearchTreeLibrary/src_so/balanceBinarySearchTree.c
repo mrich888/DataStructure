@@ -55,9 +55,9 @@ static AVLTreeCurrentNodeIsLeft(AVLTreeNode *node);
 /* 当前结点是父结点的右子树 */
 static AVLTreeCurrentNodeIsRight(AVLTreeNode *node);
 /* 右旋转 */
-static AVLTreeNodeCurrentNodeRotateRight(BalanceBinarySearchTree *pBstree, AVLTreeNode *grand);
+static int AVLTreeNodeCurrentNodeRotateRight(BalanceBinarySearchTree *pBstree, AVLTreeNode *grand);
 /* 左旋转 */
-static AVLTreeNodeCurrentNodeRotateLeft(BalanceBinarySearchTree *pBstree, AVLTreeNode *grand);
+static int AVLTreeNodeCurrentNodeRotateLeft(BalanceBinarySearchTree *pBstree, AVLTreeNode *grand);
 /* 旋转 */
 static int AVLTreeNodeRotate(BalanceBinarySearchTree *pBstree, AVLTreeNode *grand, AVLTreeNode * parent, AVLTreeNode *child);
 /* 删除之后的操作 */
@@ -201,8 +201,8 @@ static int AVLTreeNodeUpdateHeight(AVLTreeNode *node)
     int leftHeight = node->left == NULL ? 0 : node->left->height;
     int rightHeight = node->right == NULL ? 0 : node->right->height;
     //AVLTreeNodeBalanceFactor(node) >= 0 : 1 +
-
-    return  1 + tmpMax(leftHeight, rightHeight);
+    node->height =  1 + tmpMax(leftHeight, rightHeight);
+    return  ret;
 #if 0
     if (leftHeight - rightHeight > 0)
     {
@@ -218,7 +218,7 @@ static int AVLTreeNodeUpdateHeight(AVLTreeNode *node)
     }
 #endif 
 
-    return ret;
+  
 }
 
 /* 获取AVL结点较高的子结点 */
@@ -292,7 +292,7 @@ static int AVLTreeNodeRotate(BalanceBinarySearchTree *pBstree, AVLTreeNode *gran
 }
 
 /* 右旋转 */
-static AVLTreeNodeCurrentNodeRotateRight(BalanceBinarySearchTree *pBstree, AVLTreeNode *grand)
+static int AVLTreeNodeCurrentNodeRotateRight(BalanceBinarySearchTree *pBstree, AVLTreeNode *grand)
 {
     int ret = 0;
     /* 一定是LL */
@@ -334,7 +334,7 @@ static AVLTreeNodeCurrentNodeRotateRight(BalanceBinarySearchTree *pBstree, AVLTr
 }
 
 /* 左旋转 */
-static AVLTreeNodeCurrentNodeRotateLeft(BalanceBinarySearchTree *pBstree, AVLTreeNode *grand)
+static int AVLTreeNodeCurrentNodeRotateLeft(BalanceBinarySearchTree *pBstree, AVLTreeNode *grand)
 {
     int ret = 0;
     /*  此时一定是RR */
@@ -431,10 +431,9 @@ static int insertNodeAfter(BalanceBinarySearchTree *pBstree, AVLTreeNode *node)
         {
         /* 此时node是最低不平衡结点 */
         /* 开始调整平衡 */
-        AVLTreeNodeAdjustBalance(pBstree, node);
+            AVLTreeNodeAdjustBalance(pBstree, node);
 
         /* 调整完最低不平衡结点，上面的不平衡结点就会恢复平衡 */
-
         }
     }
     return ret;
@@ -479,7 +478,6 @@ int balanceBinarySearchTreeInit(BalanceBinarySearchTree **pBstree, int (*compare
         bstree->root->right = NULL;
         bstree->root->parent = NULL;
     }
-    #else
     bstree->root = createAVLTreeNewNode(0, NULL);
     if (bstree->root == NULL)
     {
@@ -500,12 +498,13 @@ int balanceBinarySearchTreeInsert(BalanceBinarySearchTree *pBstree, ELEMENTTYPE 
     int ret = 0;
     
     /* 空树 */
-    if (pBstree->size == 0)
+    if (pBstree->root == NULL)
     {
+        pBstree->root = createAVLTreeNewNode(val, NULL);
         /* 更新树的结点 */
         (pBstree->size)++;
-        insertNodeAfter(pBstree, pBstree->root);
         pBstree->root->data = val;
+        insertNodeAfter(pBstree, pBstree->root);
         return ret;
     }
 
@@ -713,21 +712,16 @@ int balanceBinarySearchTreeGetHeight(BalanceBinarySearchTree *pBstree, int *pHei
     {
         return NULL_PTR;
     }
-#if 1
-    /* 判断是否为空树 */
-    if (pBstree->size == 0)
+    int ret = 0;
+    if (pBstree->root == NULL)
     {
-        return 0;
+        return ret;
     }
-    /* 初始化高度应为0 */
-    *pHeight = pBstree->root->height;
-    return *pHeight;
-#else
-    int ret;
+    
     DoubleLinkListQueue *pQueue = NULL;
     doubleLinkListQueueInit(&pQueue);
 
-    doubleLinkListQueuePush(pQueue, pBstree->root);
+    doubleLinkListQueuePush(pQueue, (void *)(pBstree->root));
     /* 树的高度 (根结点入队高度为) */
     int height = 0;
     /* 树每一层的结点数量 */
@@ -766,7 +760,7 @@ int balanceBinarySearchTreeGetHeight(BalanceBinarySearchTree *pBstree, int *pHei
     doubleLinkListQueueDestroy(pQueue);
 
     return ret;
-#endif
+
 }
 
 /* 获取当前结点的前驱结点 */

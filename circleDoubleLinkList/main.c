@@ -9,7 +9,6 @@ int printBasicData(void *arg)
 {
     int data = *(int *)arg;
     printf("data:%d\n", data);
-
 }
 
 int compareData(ELEMENTTYPE val1, ELEMENTTYPE val2)
@@ -23,7 +22,6 @@ int compareData(ELEMENTTYPE val1, ELEMENTTYPE val2)
         return 0;
     }
 }
-
 
 int main()
 {
@@ -43,14 +41,14 @@ int main()
     CircleDoubleLinkListGetLength(list, &size);
     printf("size:%d\n", size);
 
-    //CircleDoubleLinkListForeach(list, printBasicData);
-    CircleDoubleLinkListBackForeach(list, printBasicData);
+    CircleDoubleLinkListForeach(list, printBasicData);
+    // CircleDoubleLinkListBackForeach(list, printBasicData);
 
     //CircleDoubleLinkListHeadDel(list);
     //CircleDoubleLinkListDelAppointPos(list, 2);
     //int del = 2;
     //CircleDoubleLinkListDelAppointData(list, (void *)&del, compareData);
     CircleDoubleLinkListDestory(list);
-    CircleDoubleLinkListBackForeach(list, printBasicData);
+    // CircleDoubleLinkListBackForeach(list, printBasicData);
     return 0;
 }

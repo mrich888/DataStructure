@@ -39,7 +39,7 @@ int dynamaicArrayInit(dynamaicArray *pArray, int capacity)
         return MALLOC_ERROR;
     }
 
-    /* 清楚脏数据 */
+    /* 清除脏数据 */
     memset(pArray->data, 0, sizeof(ELEMENTTYPE) * capacity);
 
     /* 初始化动态数组的参数属性 */

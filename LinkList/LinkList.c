@@ -336,6 +336,12 @@ int LinkListDestory(LinkList * pList)
         pList->head = NULL;
         pList->tail = NULL;
     }
+    if (pList != NULL)
+    {
+        free(pList);
+        pList = NULL;
+    }
+    
     return ret;
 }
 /* 链表的遍历 */

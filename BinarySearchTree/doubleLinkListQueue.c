@@ -14,13 +14,13 @@ int doubleLinkListQueuePush(doubleLinkListQueue *pQueue, ELEMENTTYPE val)
 }
 
 /* 队头元素 */
-int doubleLinkListQueueTop(doubleLinkListQueue *pQueue, ELEMENTTYPE *pval)
+int doubleLinkListQueueTop(doubleLinkListQueue *pQueue, ELEMENTTYPE * pval)
 {
     doubleLinkListGetHeadVal(pQueue, pval);
 }
 
 /* 队尾元素 */
-int doubleLinkListQueueRear(doubleLinkListQueue *pQueue, ELEMENTTYPE *pval)
+int doubleLinkListQueueRear(doubleLinkListQueue *pQueue, ELEMENTTYPE * pval)
 {
     doubleLinkListGetTailVal(pQueue, pval);
 }
